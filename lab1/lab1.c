@@ -32,7 +32,7 @@ static ssize_t proc_read(struct file *file, char __user * ubuf, size_t count, lo
   int offset = 0;  
   char output[max_size];
 
-  snprintf(&output[0], max_size, "%ld", _count);
+  snprintf(&output[0], max_size, "%ld \n", _count);
 
   size_t len = strlen(output);
 	
@@ -66,6 +66,8 @@ static int my_close(struct inode *i, struct file *f)
 static ssize_t my_read(struct file *f, char __user *buf, size_t len, loff_t *off)
 {
   printk(KERN_INFO "Driver: read()\n");
+  //dop
+  printk(KERN_DEBUG "%ld", _count);  
   return 0;
 }
 
