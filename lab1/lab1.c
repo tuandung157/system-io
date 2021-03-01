@@ -65,10 +65,24 @@ static int my_close(struct inode *i, struct file *f)
 */
 static ssize_t my_read(struct file *f, char __user *buf, size_t len, loff_t *off)
 {
-  printk(KERN_INFO "Driver: read()\n");
-  //dop
-  printk(KERN_DEBUG "%ld", _count);  
-  return 0;
+  int max_size = 10;
+  int offset = 0;  
+  char output[max_size];
+
+  snprintf(&output[0], max_size, "%ld \n", _count);
+
+  size_t lens = strlen(output);
+	
+  if (*off > 0 || len < lens){
+		return 0;
+	}
+
+	if (copy_to_user(buf, output, lens) != 0){
+		return -EFAULT;
+	}
+
+	*off = lens;
+	return lens;
 }
 
 /*
