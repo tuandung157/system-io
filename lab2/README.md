@@ -26,7 +26,7 @@ insmod main.ko
 ## Примеры использования
  ---   lsblk -l /dev/mydisk
  
- 
+ ```bash
 xoai@xoai-VirtualBox:~/Downloads/block_device$ lsblk -l /dev/mydisk
 
 NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
@@ -40,8 +40,11 @@ mydisk2 252:2 0 1K 0 part
 mydisk5 252:5 0 20M 0 part /mnt/mydisk5
 
 mydisk6 252:6 0 10M 0 part /mnt/mydisk6
+```
 
  --- fdisk -l /dev/mydisk
+ 
+ ```bash
   
 xoai@xoai-VirtualBox:~/Downloads/block_device$ fdisk -l /dev/mydisk
 
@@ -67,8 +70,10 @@ Device Boot Start End Sectors Size Id Type
 /dev/mydisk5 20481 61439 40959 20M 83 Linux
 
 /dev/mydisk6 40961 81919 40959 20M 83 Linux
+```
 
 --- mount 
+```bash
 xoai@xoai-VirtualBox:~/Downloads/block_device$ sudo mkfs.vfat -F16 /dev/mydisk5
 
 mkfs.fat 4.1 (2017-01-24)
@@ -79,13 +84,22 @@ xoai@xoai-VirtualBox:~/Downloads/block_device$ sudo mount /dev/mydisk5 /mnt/mydi
 
 xoai@xoai-VirtualBox:~/Downloads/block_device$ mount -l |grep "/dev/mydisk"
 
+```
+
 --- umount
+
+```bash
 
 xoai@xoai-VirtualBox:~/Downloads/block_device$ sudo umount /mnt/mydisk5
 
+```
+
+
 --- скорости копирования
+```bash
 root@xoai-VirtualBox:/mnt/mydisk5#  fallocate -l 5242880 /mnt/mydisk/tmp // file 5megabyte
 
 root@xoai-VirtualBox:/mnt/mydisk5# pv -pr /mnt/mydisk5/tmp > /mnt/mydisk5/temp
 
 [ 185MiB/s] [====================================================================================>] 100%
+```
