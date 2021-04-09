@@ -15,15 +15,13 @@
 #define BUF_SIZE 255
 #define PACKET_SIZE 1500
 
+#define INTERFACE_NAME "vni%d"
+#define PARENT_NAME "enp0s3"
 
 struct priv {
         struct net_device *parent;
         struct net_device_stats stats;
 };
-
-
-static char* ifname =  "vni%d";
-static char* link = "enp0s3";
 
 
 static struct net_device *ndev;
@@ -137,16 +135,16 @@ static struct file_operations proc_fops = {
 
 
 int __init vni_init(void) {
-    ndev = alloc_netdev(sizeof(struct priv), ifname, NET_NAME_UNKNOWN, ndev_setup);
+    ndev = alloc_netdev(sizeof(struct priv), INTERFACE_NAME, NET_NAME_UNKNOWN, ndev_setup);
     if (ndev == NULL) {
         printk(KERN_ERR "%s: unable to allocate net device\n", THIS_MODULE->name);
         return -ENOMEM;
     }
 
     struct priv *priv = netdev_priv(ndev);
-    priv->parent = __dev_get_by_name(&init_net, link); // parent interace
+    priv->parent = __dev_get_by_name(&init_net, PARENT_NAME); // parent interace
     if (!priv->parent) {
-        printk(KERN_ERR "%s: unable to find parent for net device: %s\n", THIS_MODULE->name, link);
+        printk(KERN_ERR "%s: unable to find parent for net device: %s\n", THIS_MODULE->name, PARENT_NAME);
         free_netdev(ndev);
         return -ENODEV;
     }
@@ -175,7 +173,7 @@ int __init vni_init(void) {
 
     register_netdev(ndev);
     rtnl_lock();
-    netdev_rx_handler_register(priv->parent, handle_frame, NULL);
+    netdev_rx_handler_register(priv->parent, &handle_frame, NULL);
     rtnl_unlock();
     
     printk(KERN_INFO "Module %s loaded", THIS_MODULE->name);
