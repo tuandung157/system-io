@@ -13,7 +13,7 @@
 sudo make 
 ## Инструкция пользователя
 
-sudo make do = sudo insmod lab3.ko
+sudo make do/sudo insmod lab3.ko
 
 dmesg
 ```
